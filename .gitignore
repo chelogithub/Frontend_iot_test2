@@ -16,7 +16,7 @@ $RECYCLE.BIN/
 *.log
 log.txt
 npm-debug.log*
-
+/node_modules
 /.angular
 /.idea
 /.ionic
@@ -26,7 +26,6 @@ npm-debug.log*
 /.vscode
 /coverage
 /dist
-/node_modules
 /db/data
 /platforms
 /plugins

@@ -36,8 +36,8 @@ export class GraficoPage implements OnInit {
   graphSeries: Array<any>;
   seriesVect: Array<any>= new Array<any>();
 
-  data1: any;
-  data2: any;
+  fechaDesde: any;
+  fechaHasta: any;
   fecha: string;
 
   public mygraph;
@@ -65,7 +65,6 @@ export class GraficoPage implements OnInit {
 
   async datosDispositivo()
   {
-   
    try{
 
           this.dispositivo = await this.conndb.getDispositivo(this.data);
@@ -78,8 +77,6 @@ export class GraficoPage implements OnInit {
        this.dbStatus=false;
      }
   }
-
-
   async mostrarLogs()
   {
     try{
@@ -118,15 +115,18 @@ export class GraficoPage implements OnInit {
   }
   async mostrarIntervalo()
   {
-    try{
-      this.regenerarGrafico();
-      this.logs=await this.conndb.getIntervalo(this.data,this.data1,this.data2);
-      this.convertirDatos();
-      }
-      catch(error)
-      {
-        this.dbStatus=false;
-      }
+    if(this.check_DATE())
+    {
+      try{
+        this.regenerarGrafico();
+        this.logs=await this.conndb.getIntervalo(this.data,this.fechaDesde,this.fechaHasta);
+        this.convertirDatos();
+        }
+        catch(error)
+        {
+          this.dbStatus=false;
+        }
+    }
   }
 
   clearLogs()
@@ -271,11 +271,67 @@ generarGrafico(){
   });
 }
 
-test()
+test() //flag
   {
-    this.fecha=this.data1;
+    this.fecha=this.fechaDesde;
     console.log("hola");
   }
+  check_DATE()
+  {
+    let desde: number;
+    let hasta: number;
+    if(this.fechaDesde != null)
+    {
+      let yearDesde=Number(<string>(this.fechaDesde).substring(0,4));
+      let monthDesde=Number(<string>(this.fechaDesde).substring(5,7));
+      let dayDesde=Number(<string>(this.fechaDesde).substring(8,10));
+      let hsDesde=Number(<string>(this.fechaDesde).substring(11,13));
+      let minDesde=Number(<string>(this.fechaDesde).substring(14,16));
+      let segDesde=Number(<string>(this.fechaDesde).substring(17,19));
+      console.log(yearDesde+" "+ monthDesde+" "+ dayDesde+" "+hsDesde+" "+ minDesde+" "+ segDesde);
+      desde=Date.UTC(yearDesde,monthDesde,dayDesde,hsDesde,minDesde,segDesde);
+      console.log(desde);
+    }else{
+      console.log("No se ha ingresado Fecha Desde");
+      alert("No se ha ingresado Fecha Desde");
+      return (false);
+    }
+    if(this.fechaHasta != null)
+    {
+      let yearHasta=Number(<string>(this.fechaHasta).substring(0,4));
+      let monthHasta=Number(<string>(this.fechaHasta).substring(5,7));
+      let dayHasta=Number(<string>(this.fechaHasta).substring(8,10));
+      let hsHasta=Number(<string>(this.fechaHasta).substring(11,13));
+      let minHasta=Number(<string>(this.fechaHasta).substring(14,16));
+      let segHasta=Number(<string>(this.fechaHasta).substring(17,19));
+      console.log(yearHasta+" "+ monthHasta+" "+ dayHasta+" "+hsHasta+" "+ minHasta+" "+ segHasta);
+      hasta=Date.UTC(yearHasta,monthHasta,dayHasta,hsHasta,minHasta,segHasta);
+      console.log(hasta);
+    }else{
+      console.log("No se ha ingresado Fecha Hasta");
+      alert("No se ha ingresado Fecha Hasta");
+      return (false);
+    }
+    if(hasta>desde)
+    {
+      if((hasta-desde)<15768000000)
+        {
+          console.log(hasta-desde);
+          return(true);
+        }
+        else{
+          console.log(hasta-desde);
+          alert("Especifique un intervalo menor a 6 meses")
+          return(false);
+        }
+      
+    }
+    else{
+      alert("La fecha final debe ser posterior a la inicial");
+      return(false);
+      }
+    }
+    
 
   onIonChange(ev: Event) {
 
@@ -285,12 +341,13 @@ test()
     if((ev.target as Element).id=="datetime")
     {
       console.log("Fecha desde");
-      this.data1 = (ev as DatetimeCustomEvent).detail.value;
+      this.fechaDesde = (ev as DatetimeCustomEvent).detail.value;
+
     }
     if((ev.target as Element).id=="datetime2")
     {
       console.log("Fecha hasta");
-      this.data2 = (ev as DatetimeCustomEvent).detail.value;
+      this.fechaHasta = (ev as DatetimeCustomEvent).detail.value;
     }
      
   }
