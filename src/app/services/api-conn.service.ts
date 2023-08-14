@@ -58,9 +58,12 @@ export class ApiConnService {
     const body={'inicio':inicio,'fin':fin};
     return this._http.post<any>('http://192.168.0.186:3000/graf/intervalo/'+ id, body).toPromise();
   }
-
-  postCanal(topico,data): Promise<any> {
+  postCanal(topico,data): Promise<any>{
+    const body={'topico':topico,'data':data};
+    return this._http.post('http://192.168.0.186:3000/activaciones/canal/',body,{responseType: "text"}).toPromise();
+  }
+  /*postCanal(topico,data): Promise<any> {
     const body={'topico':topico,'data':data};
     return this._http.post<any>('http://192.168.0.186:3000/activaciones/canal/',body).toPromise();
-  }
+  }*/
 }
