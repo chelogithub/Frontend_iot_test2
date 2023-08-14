@@ -41,15 +41,19 @@ export class ApiConnService {
   getLogs(id): Promise<any> {
     return this._http.get<any>('http://192.168.0.186:3000/graf/todos/' + id).toPromise();
   }
+
   getLogsSemana(id): Promise<any> {
     return this._http.get<any>('http://192.168.0.186:3000/graf/semana/' + id).toPromise();
   }
+
   getLogsDia(id): Promise<any> {
     return this._http.get<any>('http://192.168.0.186:3000/graf/dia/' + id).toPromise();
   }
+
   getLastLog(id): Promise<Log> {
     return this._http.get<Log>('http://192.168.0.186:3000/graf/last/' + id).toPromise();
   }
+  
   getIntervalo(id,inicio,fin): Promise<any> {
     const body={'inicio':inicio,'fin':fin};
     return this._http.post<any>('http://192.168.0.186:3000/graf/intervalo/'+ id, body).toPromise();

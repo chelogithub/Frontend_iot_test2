@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { ApiConnService } from '../services/api-conn.service';
 import { Dispositivo } from '../model/Dispositivo';
+import { HomePageModule } from './home.module';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ export class HomePage {
   listadoDispositivo: Array<Dispositivo>;
   estado: any;
   dbStatus: boolean;
+  dMode: boolean;
   constructor(public conndb: ApiConnService) {
                                               this.dbStatus=true;
                                               this.callApi();

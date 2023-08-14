@@ -39,6 +39,7 @@ export class GraficoPage implements OnInit {
   fechaDesde: any;
   fechaHasta: any;
   fecha: string;
+ 
 
   public mygraph;
   public graphOptions;
@@ -314,7 +315,7 @@ test() //flag
     }
     if(hasta>desde)
     {
-      if((hasta-desde)<15768000000)
+      if((hasta-desde)<<15768000000)
         {
           console.log(hasta-desde);
           return(true);
